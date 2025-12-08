@@ -20,13 +20,25 @@ export class AuthGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     
-    // TODO: Implement JWT validation
-    // const token = this.extractTokenFromHeader(request);
-    // const user = await this.authService.validateToken(token);
-    // request.user = user;
+    // TODO: Implement JWT validation before production deployment
+    // SECURITY WARNING: This guard currently allows all requests!
+    // 
+    // Implementation steps:
+    // 1. Uncomment and implement the following:
+    //    const token = this.extractTokenFromHeader(request);
+    //    if (!token) {
+    //      throw new UnauthorizedException('No token provided');
+    //    }
+    //    const user = await this.authService.validateToken(token);
+    //    request.user = user;
+    //    return true;
+    // 
+    // 2. Install required packages: npm install express-jwt jwks-rsa
+    // 3. Configure Auth0 domain and audience in environment variables
+    // 4. Test thoroughly before deploying to production
     
-    // Placeholder: Allow all requests (REMOVE IN PRODUCTION)
-    console.warn('⚠️  Auth guard is not implemented - allowing all requests');
+    console.warn('⚠️  SECURITY WARNING: Auth guard is not implemented - allowing all requests');
+    console.warn('⚠️  DO NOT USE IN PRODUCTION without implementing authentication!');
     return true;
   }
 
