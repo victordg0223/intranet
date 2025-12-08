@@ -135,7 +135,8 @@ export class InfinityPayService {
    * 3. Update database accordingly
    * 4. Send notifications if needed
    */
-  async handleWebhook(payload: any, signature: string): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+  async handleWebhook(_payload: any, _signature: string): Promise<void> {
     console.log('TODO: Implement InfinityPay webhook handling');
     // Placeholder implementation
     
@@ -158,7 +159,8 @@ export class InfinityPayService {
   /**
    * TODO: Verify webhook signature
    */
-  private verifySignature(payload: any, signature: string): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+  private verifySignature(_payload: any, _signature: string): boolean {
     console.log('TODO: Implement signature verification');
     return true; // Placeholder
   }

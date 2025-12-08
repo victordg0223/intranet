@@ -27,7 +27,8 @@ export class AuthService {
    * 3. Validate token claims (exp, iss, aud)
    * 4. Extract user information from token
    */
-  async validateToken(token: string): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+  async validateToken(_token: string): Promise<any> {
     // Placeholder implementation
     console.log('TODO: Implement Auth0 JWT validation');
     return null;
@@ -42,7 +43,8 @@ export class AuthService {
    * 3. Link user to appropriate tenant
    * 4. Return user with roles and permissions
    */
-  async syncUser(auth0UserId: string): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+  async syncUser(_auth0UserId: string): Promise<any> {
     // Placeholder implementation
     console.log('TODO: Implement Auth0 user sync');
     return null;
@@ -56,7 +58,8 @@ export class AuthService {
    * 2. Check against required roles
    * 3. Handle tenant-specific permissions
    */
-  async checkPermission(userId: string, permission: string): Promise<boolean> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async checkPermission(_userId: string, _permission: string): Promise<boolean> {
     // Placeholder implementation
     console.log('TODO: Implement permission checking');
     return false;

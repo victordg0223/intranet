@@ -1,7 +1,8 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
 // import jwt from 'jsonwebtoken';
 // import jwksClient from 'jwks-rsa';
+// import { UnauthorizedException } from '@nestjs/common';
 
 /**
  * Auth guard for protecting routes using Auth0 JWT validation
@@ -31,9 +32,10 @@ export class AuthGuard implements CanActivate {
   // });
 
   canActivate(
-    context: ExecutionContext,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request = context.switchToHttp().getRequest();
+    // const request = _context.switchToHttp().getRequest();
     
     // STUB IMPLEMENTATION - TODO: Replace with passport strategy
     // SECURITY WARNING: This guard currently allows all requests!
@@ -84,6 +86,7 @@ export class AuthGuard implements CanActivate {
   //   }
   // }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private extractTokenFromHeader(request: any): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;

@@ -40,6 +40,7 @@ export class PaymentsController {
   @ApiResponse({ status: 200, description: 'Webhook processed successfully' })
   @ApiResponse({ status: 400, description: 'Invalid webhook payload' })
   @ApiResponse({ status: 401, description: 'Invalid webhook signature' })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async handleInfinityPayWebhook(
     @Body() payload: any,
     @Headers('x-infinitypay-signature') signature: string,
