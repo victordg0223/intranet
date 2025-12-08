@@ -1,0 +1,39 @@
+{
+  "name": "intranet-saas",
+  "version": "1.0.0",
+  "description": "Intranet SaaS Monorepo - Next.js Frontend & NestJS Backend",
+  "private": true,
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "install:frontend": "npm --prefix frontend install",
+    "install:backend": "npm --prefix backend install",
+    "install:all": "npm run install:frontend && npm run install:backend",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "build:frontend": "npm --prefix frontend run build",
+    "build:backend": "npm --prefix backend run build",
+    "build:all": "npm run build:frontend && npm run build:backend",
+    "test:frontend": "npm --prefix frontend run test",
+    "test:backend": "npm --prefix backend run test",
+    "test:all": "npm run test:frontend && npm run test:backend",
+    "lint:frontend": "npm --prefix frontend run lint",
+    "lint:backend": "npm --prefix backend run lint",
+    "lint:all": "npm run lint:frontend && npm run lint:backend",
+    "prisma:generate": "npm --prefix backend run prisma:generate",
+    "prisma:migrate": "npm --prefix backend run prisma:migrate",
+    "prisma:seed": "npm --prefix backend run seed"
+  },
+  "keywords": [
+    "monorepo",
+    "nextjs",
+    "nestjs",
+    "prisma",
+    "saas",
+    "intranet"
+  ],
+  "author": "victordg0223",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/victordg0223/intranet.git"
+  }
+}

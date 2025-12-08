@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint-test-build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies (Frontend)
+        run: npm --prefix frontend ci
+
+      - name: Install dependencies (Backend)
+        run: npm --prefix backend ci
+
+      - name: Generate Prisma Client
+        run: npm --prefix backend run prisma:generate
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/test
+
+      - name: Lint Frontend
+        run: npm --prefix frontend run lint
+
+      - name: Lint Backend
+        run: npm --prefix backend run lint
+
+      - name: Test Frontend
+        run: npm --prefix frontend run test
+
+      - name: Test Backend
+        run: npm --prefix backend run test
+
+      - name: Build Frontend
+        run: npm --prefix frontend run build
+
+      - name: Build Backend
+        run: npm --prefix backend run build
+
+      # Optional: Build and push Docker images to GHCR
+      # - name: Login to GitHub Container Registry
+      #   uses: docker/login-action@v3
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GHCR_TOKEN }}
+      #
+      # - name: Build and push Frontend image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: infra/Dockerfile.frontend
+      #     push: true
+      #     tags: ghcr.io/${{ github.repository }}/frontend:latest
+      #
+      # - name: Build and push Backend image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: infra/Dockerfile.backend
+      #     push: true
+      #     tags: ghcr.io/${{ github.repository }}/backend:latest

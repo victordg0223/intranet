@@ -1,0 +1,36 @@
+name: Prisma Migrate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/prisma/schema.prisma'
+      - 'backend/prisma/migrations/**'
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm --prefix backend ci
+
+      - name: Run Prisma Migrate Deploy
+        run: npm --prefix backend run prisma:migrate:deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      # Note: This workflow runs 'prisma migrate deploy' which applies pending migrations
+      # in production. For development, use 'prisma migrate dev' locally.
+      # Ensure DATABASE_URL secret is set in GitHub repository settings pointing
+      # to your production database (e.g., Neon PostgreSQL).
