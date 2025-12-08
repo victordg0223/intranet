@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install root dependencies
+        run: npm ci --if-present || echo "No root dependencies"
+
+      - name: Install frontend dependencies
+        run: npm --prefix frontend ci
+
+      - name: Install backend dependencies
+        run: npm --prefix backend ci
+
+      - name: Lint frontend
+        run: npm --prefix frontend run lint
+
+      - name: Lint backend
+        run: npm --prefix backend run lint
+
+      - name: Generate Prisma client
+        run: npm --prefix backend run prisma:generate
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/test
+
+      - name: Build backend
+        run: npm --prefix backend run build
+
+      - name: Run backend tests
+        run: npm --prefix backend run test
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/test
+
+      - name: Build frontend
+        run: npm --prefix frontend run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3001
+
+  # Optional: Build and push Docker images to GHCR
+  # Uncomment when ready to use
+  # docker-build:
+  #   runs-on: ubuntu-latest
+  #   needs: lint-and-test
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  #
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v3
+  #
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v3
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GHCR_TOKEN }}
+  #
+  #     - name: Build and push backend image
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: .
+  #         file: ./infra/Dockerfile.backend
+  #         push: true
+  #         tags: |
+  #           ghcr.io/${{ github.repository }}/backend:latest
+  #           ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
+  #
+  #     - name: Build and push frontend image
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: .
+  #         file: ./infra/Dockerfile.frontend
+  #         push: true
+  #         tags: |
+  #           ghcr.io/${{ github.repository }}/frontend:latest
+  #           ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}

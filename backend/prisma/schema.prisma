@@ -1,0 +1,87 @@
+// Prisma Schema for Intranet SaaS
+// Database: PostgreSQL (Neon recommended)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Tenant model for multi-tenancy
+model Tenant {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  plan      String   @default("free") // free, basic, premium, enterprise
+  status    String   @default("active") // active, suspended, cancelled
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  users     User[]
+  auditLogs AuditLog[]
+
+  @@index([slug])
+  @@index([status])
+  @@map("tenants")
+}
+
+// User model
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  role      String   @default("USER") // USER, ADMIN, SUPER_ADMIN
+  tenantId  String
+  auth0Id   String?  @unique // Auth0 user ID
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  auditLogs AuditLog[]
+
+  @@index([email])
+  @@index([tenantId])
+  @@index([auth0Id])
+  @@map("users")
+}
+
+// Audit log for tracking user actions
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String // CREATE, UPDATE, DELETE, LOGIN, LOGOUT, etc.
+  entity    String // User, Document, Payment, etc.
+  entityId  String?
+  userId    String?
+  tenantId  String
+  metadata  Json? // Additional context
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  // Relations
+  user   User?  @relation(fields: [userId], references: [id], onDelete: SetNull)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// TODO: Add more models as needed:
+// - Document (for document management)
+// - Payment (for payment tracking)
+// - Subscription (for subscription management)
+// - Team (for team collaboration)
+// - Project (for project management)
+// - Task (for task tracking)
+// - Comment (for discussions)
+// - Notification (for user notifications)
+// - Integration (for third-party integrations)
+// - Webhook (for webhook management)

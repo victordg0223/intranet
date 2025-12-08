@@ -1,0 +1,55 @@
+FROM node:18-alpine AS base
+
+# Install dependencies only when needed
+FROM base AS deps
+WORKDIR /app
+
+# Copy frontend package files
+COPY frontend/package*.json ./frontend/
+
+# Install dependencies
+RUN cd frontend && npm ci
+
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+
+# Copy dependencies from deps stage
+COPY --from=deps /app/frontend/node_modules ./frontend/node_modules
+
+# Copy frontend source
+COPY frontend ./frontend
+
+# Build the application
+WORKDIR /app/frontend
+RUN npm run build
+
+# Production image, copy all the files and run next
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+# Copy built application
+COPY --from=builder --chown=nextjs:nodejs /app/frontend/.next ./frontend/.next
+COPY --from=builder --chown=nextjs:nodejs /app/frontend/node_modules ./frontend/node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/frontend/package*.json ./frontend/
+COPY --from=builder --chown=nextjs:nodejs /app/frontend/public ./frontend/public
+COPY --from=builder --chown=nextjs:nodejs /app/frontend/next.config.js ./frontend/
+
+WORKDIR /app/frontend
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+# For development, use: npm run dev
+# For production, use: npm run start
+CMD ["npm", "run", "start"]

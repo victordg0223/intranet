@@ -1,0 +1,1 @@
+This PR adds the initial monorepo skeleton for the Intranet SaaS project, including Next.js frontend, NestJS backend, Prisma ORM, Docker infrastructure, and CI/CD workflows.
