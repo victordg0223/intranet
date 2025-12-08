@@ -1,0 +1,48 @@
+{
+  "name": "intranet-saas",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Intranet SaaS - Monorepo with Next.js frontend and NestJS backend",
+  "keywords": [
+    "monorepo",
+    "nextjs",
+    "nestjs",
+    "prisma",
+    "postgresql",
+    "typescript"
+  ],
+  "author": "victordg0223",
+  "license": "GPL-3.0-or-later",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "scripts": {
+    "frontend:install": "npm --prefix frontend install",
+    "frontend:dev": "npm --prefix frontend run dev",
+    "frontend:build": "npm --prefix frontend run build",
+    "frontend:start": "npm --prefix frontend run start",
+    "frontend:lint": "npm --prefix frontend run lint",
+    "frontend:test": "npm --prefix frontend run test",
+    "backend:install": "npm --prefix backend install",
+    "backend:dev": "npm --prefix backend run dev",
+    "backend:build": "npm --prefix backend run build",
+    "backend:start": "npm --prefix backend run start",
+    "backend:lint": "npm --prefix backend run lint",
+    "backend:test": "npm --prefix backend run test",
+    "backend:prisma:generate": "npm --prefix backend run prisma:generate",
+    "backend:prisma:migrate": "npm --prefix backend run prisma:migrate",
+    "backend:seed": "npm --prefix backend run seed",
+    "install:all": "npm install && npm run frontend:install && npm run backend:install",
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
+    "build": "npm run backend:build && npm run frontend:build",
+    "lint": "npm run backend:lint && npm run frontend:lint",
+    "test": "npm run backend:test && npm run frontend:test",
+    "docker:up": "docker-compose -f infra/docker-compose.yml up -d",
+    "docker:down": "docker-compose -f infra/docker-compose.yml down",
+    "docker:logs": "docker-compose -f infra/docker-compose.yml logs -f"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

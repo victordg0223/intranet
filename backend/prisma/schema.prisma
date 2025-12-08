@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Tenant model for multi-tenancy
+model Tenant {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  domain    String?  @unique
+  active    Boolean  @default(true)
+  
+  // Subscription info
+  planId    String?
+  subscriptionId String?
+  subscriptionStatus String?
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  users     User[]
+  auditLogs AuditLog[]
+  
+  @@index([slug])
+  @@index([domain])
+  @@map("tenants")
+}
+
+// User model
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  auth0Id   String?  @unique
+  
+  // Tenant relation
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  // User metadata
+  role      String   @default("user")
+  active    Boolean  @default(true)
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastLoginAt DateTime?
+  
+  // Relations
+  auditLogs AuditLog[]
+  
+  @@index([email])
+  @@index([tenantId])
+  @@index([auth0Id])
+  @@map("users")
+}
+
+// Audit Log model for tracking actions
+model AuditLog {
+  id        String   @id @default(cuid())
+  
+  // Tenant and User
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  // Action details
+  action    String
+  entity    String
+  entityId  String?
+  
+  // Additional metadata
+  metadata  Json?
+  ipAddress String?
+  userAgent String?
+  
+  // Timestamp
+  createdAt DateTime @default(now())
+  
+  @@index([tenantId])
+  @@index([userId])
+  @@index([action])
+  @@index([entity])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
