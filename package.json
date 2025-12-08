@@ -11,6 +11,7 @@
   },
   "scripts": {
     "bootstrap": "npm install && npm run install:frontend && npm run install:backend",
+    "install": "npm run bootstrap",
     "install:frontend": "npm install --prefix frontend",
     "install:backend": "npm install --prefix backend",
     "dev:frontend": "npm run dev --prefix frontend",
@@ -18,6 +19,9 @@
     "build": "npm run build:frontend && npm run build:backend",
     "build:frontend": "npm run build --prefix frontend",
     "build:backend": "npm run build --prefix backend",
+    "start": "npm run start:frontend & npm run start:backend",
+    "start:frontend": "npm run start --prefix frontend",
+    "start:backend": "npm run start:prod --prefix backend",
     "lint": "npm run lint:frontend && npm run lint:backend",
     "lint:frontend": "npm run lint --prefix frontend",
     "lint:backend": "npm run lint --prefix backend",
