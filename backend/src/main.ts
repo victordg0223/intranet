@@ -1,16 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
-import * as Sentry from '@sentry/node';
 
 async function bootstrap() {
-  // Initialize Sentry if DSN is configured
+  // Initialize Sentry if DSN is configured and available
   if (process.env.SENTRY_DSN) {
-    Sentry.init({
-      dsn: process.env.SENTRY_DSN,
-      environment: process.env.NODE_ENV || 'development',
-      tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
-    });
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const Sentry = require('@sentry/node');
+      Sentry.init({
+        dsn: process.env.SENTRY_DSN,
+        environment: process.env.NODE_ENV || 'development',
+        tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+      });
+    } catch (error) {
+      console.warn('Sentry is not available');
+    }
   }
 
   const app = await NestFactory.create(AppModule);

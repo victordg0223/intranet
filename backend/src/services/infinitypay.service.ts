@@ -14,12 +14,13 @@ export class InfinitypayService {
 
   constructor(private configService: ConfigService) {
     this.apiKey = this.configService.get<string>('INFINITYPAY_API_KEY') || '';
-    const apiUrl = this.configService.get<string>('INFINITYPAY_API_URL') || 'https://api.infinitypay.io';
+    const apiUrl =
+      this.configService.get<string>('INFINITYPAY_API_URL') || 'https://api.infinitypay.io';
 
     this.client = axios.create({
       baseURL: apiUrl,
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
       },
     });
@@ -35,7 +36,7 @@ export class InfinitypayService {
    */
   async createPaymentIntent(amount: number, currency: string, metadata?: any) {
     this.logger.log(`Creating payment intent: ${amount} ${currency}`);
-    
+
     // Stub implementation
     return {
       id: `intent_${Date.now()}`,
@@ -52,7 +53,7 @@ export class InfinitypayService {
    */
   async createSubscription(tenantId: string, planId: string) {
     this.logger.log(`Creating subscription for tenant ${tenantId} with plan ${planId}`);
-    
+
     // Stub implementation
     return {
       id: `sub_${Date.now()}`,
@@ -69,7 +70,7 @@ export class InfinitypayService {
    */
   async cancelSubscription(subscriptionId: string) {
     this.logger.log(`Canceling subscription ${subscriptionId}`);
-    
+
     // Stub implementation
     return {
       id: subscriptionId,
@@ -82,9 +83,9 @@ export class InfinitypayService {
    * Verify webhook signature
    * TODO: Implement actual signature verification
    */
-  verifyWebhookSignature(payload: string, signature: string): boolean {
+  verifyWebhookSignature(_payload: string, _signature: string): boolean {
     this.logger.log('Verifying webhook signature');
-    
+
     // Stub implementation - always returns true for development
     return true;
   }
