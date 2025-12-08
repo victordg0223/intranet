@@ -1,0 +1,56 @@
+# Base stage - shared dependencies
+FROM node:20-alpine AS base
+WORKDIR /app
+
+# Development stage
+FROM base AS development
+COPY backend/package*.json ./
+COPY backend/prisma ./prisma/
+RUN npm ci
+COPY backend/ .
+RUN npx prisma generate
+EXPOSE 4000
+CMD ["npm", "run", "start:dev"]
+
+# Dependencies stage - install production dependencies
+FROM base AS deps
+COPY backend/package*.json ./
+COPY backend/prisma ./prisma/
+RUN npm ci --only=production && \
+    npm cache clean --force && \
+    npx prisma generate
+
+# Builder stage - build the application
+FROM base AS builder
+COPY backend/package*.json ./
+COPY backend/prisma ./prisma/
+RUN npm ci
+COPY backend/ .
+RUN npx prisma generate
+RUN npm run build
+
+# Production stage - minimal runtime image
+FROM node:20-alpine AS production
+
+# Add non-root user for security
+RUN addgroup --system --gid 1001 nestjs && \
+    adduser --system --uid 1001 nestjs
+
+WORKDIR /app
+
+# Copy dependencies and built application
+COPY --from=deps --chown=nestjs:nestjs /app/node_modules ./node_modules
+COPY --from=builder --chown=nestjs:nestjs /app/dist ./dist
+COPY --from=builder --chown=nestjs:nestjs /app/prisma ./prisma
+COPY --from=builder --chown=nestjs:nestjs /app/package*.json ./
+
+# Set user
+USER nestjs
+
+# Expose port
+EXPOSE 4000
+
+ENV NODE_ENV=production
+
+# Start the application
+CMD ["node", "dist/main.js"]
