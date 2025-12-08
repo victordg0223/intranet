@@ -1,0 +1,43 @@
+{
+  "name": "intranet-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Intranet SaaS platform - monorepo with Next.js frontend and NestJS backend",
+  "author": "victordg0223",
+  "license": "GPL-3.0-or-later",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "scripts": {
+    "bootstrap": "npm install && npm run install:frontend && npm run install:backend",
+    "install:frontend": "npm install --prefix frontend",
+    "install:backend": "npm install --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run start:dev --prefix backend",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "npm run build --prefix frontend",
+    "build:backend": "npm run build --prefix backend",
+    "lint": "npm run lint:frontend && npm run lint:backend",
+    "lint:frontend": "npm run lint --prefix frontend",
+    "lint:backend": "npm run lint --prefix backend",
+    "test": "npm run test:frontend && npm run test:backend",
+    "test:frontend": "npm run test --prefix frontend",
+    "test:backend": "npm run test --prefix backend",
+    "docker:up": "docker-compose -f infra/docker-compose.yml up -d",
+    "docker:down": "docker-compose -f infra/docker-compose.yml down",
+    "docker:logs": "docker-compose -f infra/docker-compose.yml logs -f"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/victordg0223/intranet.git"
+  },
+  "keywords": [
+    "monorepo",
+    "saas",
+    "intranet",
+    "nextjs",
+    "nestjs",
+    "typescript"
+  ]
+}
