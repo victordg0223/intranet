@@ -231,12 +231,14 @@ The `docker-compose.yml` includes a PostgreSQL 15 container. Connection details:
 
 **Required Environment Variables in Vercel:**
 
+⚠️ **Security**: Never commit secrets to version control. Always configure them in Vercel's dashboard.
+
 Set these in your Vercel project settings:
-- `AUTH0_SECRET` - 32-byte hex string (generate with `openssl rand -hex 32`)
+- `AUTH0_SECRET` - 32-byte hex string (generate with `openssl rand -hex 32`) **⚠️ KEEP SECRET**
 - `AUTH0_BASE_URL` - Your Vercel deployment URL
 - `AUTH0_ISSUER_BASE_URL` - Your Auth0 domain URL
 - `AUTH0_CLIENT_ID` - Auth0 application client ID
-- `AUTH0_CLIENT_SECRET` - Auth0 application client secret
+- `AUTH0_CLIENT_SECRET` - Auth0 application client secret **⚠️ KEEP SECRET**
 - `NEXT_PUBLIC_AUTH0_DOMAIN` - Auth0 domain (for client-side)
 - `NEXT_PUBLIC_AUTH0_CLIENT_ID` - Auth0 client ID (for client-side)
 - `NEXT_PUBLIC_MEILISEARCH_HOST` - Meilisearch instance URL

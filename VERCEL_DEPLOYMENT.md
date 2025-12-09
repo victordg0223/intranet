@@ -38,13 +38,15 @@ The configuration should work without additional Vercel dashboard settings.
 
 Configure the following environment variables in your Vercel project settings (Settings → Environment Variables):
 
+⚠️ **Security Warning**: Never commit secrets like `AUTH0_SECRET` or `AUTH0_CLIENT_SECRET` to version control. Always configure them as environment variables in Vercel's dashboard.
+
 ### Required Variables
 
-- `AUTH0_SECRET` - Auth0 secret for session encryption (generate with `openssl rand -hex 32`)
+- `AUTH0_SECRET` - Auth0 secret for session encryption (generate with `openssl rand -hex 32`) **⚠️ KEEP SECRET**
 - `AUTH0_BASE_URL` - Your Vercel deployment URL (e.g., `https://your-app.vercel.app`)
 - `AUTH0_ISSUER_BASE_URL` - Your Auth0 domain (e.g., `https://your-tenant.auth0.com`)
 - `AUTH0_CLIENT_ID` - Auth0 application client ID
-- `AUTH0_CLIENT_SECRET` - Auth0 application client secret
+- `AUTH0_CLIENT_SECRET` - Auth0 application client secret **⚠️ KEEP SECRET**
 
 ### Optional Public Variables
 
