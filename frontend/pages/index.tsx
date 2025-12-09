@@ -1,5 +1,6 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Head from 'next/head';
+import Link from 'next/link';
 import styles from '@/styles/Home.module.css';
 
 export default function Home() {
@@ -19,34 +20,32 @@ export default function Home() {
       <main className={styles.main}>
         <div className={styles.container}>
           <h1 className={styles.title}>Welcome to Intranet</h1>
-          
+
           {user ? (
             <div className={styles.userInfo}>
               <p>Hello, {user.name}!</p>
-              <a href="/api/auth/logout" className={styles.link}>
+              <Link href="/api/auth/logout" className={styles.link}>
                 Logout
-              </a>
+              </Link>
             </div>
           ) : (
             <div className={styles.auth}>
               <p>Please log in to continue</p>
-              <a href="/api/auth/login" className={styles.link}>
+              <Link href="/api/auth/login" className={styles.link}>
                 Login
-              </a>
+              </Link>
             </div>
           )}
 
           <div className={styles.description}>
-            <p>
-              A modern SaaS intranet platform built with Next.js, NestJS, and PostgreSQL.
-            </p>
+            <p>A modern SaaS intranet platform built with Next.js, NestJS, and PostgreSQL.</p>
           </div>
 
           <div className={styles.grid}>
-            <a href="/api/auth/login" className={styles.card}>
+            <Link href="/api/auth/login" className={styles.card}>
               <h2>Authentication &rarr;</h2>
               <p>Powered by Auth0</p>
-            </a>
+            </Link>
 
             <a href="#" className={styles.card}>
               <h2>Search &rarr;</h2>
