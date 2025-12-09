@@ -62,3 +62,4 @@ prisma/migrations/*
 
 # Sentry
 .sentryclirc
+*.disabled
