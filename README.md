@@ -220,14 +220,18 @@ The `docker-compose.yml` includes a PostgreSQL 15 container. Connection details:
 
 ### Frontend (Vercel)
 
-> **📘 Important**: For detailed Vercel deployment instructions including monorepo configuration and troubleshooting, see [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md).
+> **⚠️ CRITICAL**: This is a monorepo. You **MUST** set Root Directory to `frontend` in Vercel Project Settings or deployment will fail. See [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md) for detailed instructions.
 
 **Quick Setup:**
 
 1. Connect your GitHub repository to Vercel
-2. **Set Root Directory** to `frontend` in Project Settings → General → Root Directory
+2. **⚠️ REQUIRED: Set Root Directory** to `frontend` in Project Settings → General → Root Directory
+   - Go to your Vercel project → Settings → General → Root Directory
+   - Click "Edit" and set to: `frontend`
+   - Click "Save"
 3. Configure environment variables in Vercel dashboard (see below)
-4. Deployments will trigger automatically on push to `main`
+4. Redeploy your application (trigger a new deployment)
+5. Deployments will trigger automatically on future pushes to `main`
 
 **Required Environment Variables in Vercel:**
 

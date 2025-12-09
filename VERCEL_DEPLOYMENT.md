@@ -4,35 +4,39 @@ This document provides instructions for deploying the Intranet application to Ve
 
 ## Overview
 
-This is a monorepo project with the Next.js frontend located in the `frontend/` directory. Vercel deployment requires proper configuration to locate and build the application.
+This is a monorepo project with the Next.js frontend located in the `frontend/` directory. 
 
-## Deployment Configuration
+## ⚠️ REQUIRED: Configure Root Directory
 
-### Option 1: Configure Root Directory in Vercel Dashboard (Recommended)
+**YOU MUST CONFIGURE THE ROOT DIRECTORY IN VERCEL FOR THIS PROJECT TO WORK.**
 
-This is the simplest and most reliable method for monorepo deployments:
+This is not optional - the deployment will fail without this configuration.
+
+### Steps to Configure Root Directory:
 
 1. **Log in to Vercel** and go to your project settings
 2. **Navigate to**: Settings → General → Root Directory
-3. **Set Root Directory** to: `frontend`
-4. **Save** the settings
-5. **Redeploy** your application
+3. **Click "Edit"** next to Root Directory
+4. **Set Root Directory** to: `frontend`
+5. **Click "Save"**
+6. **Redeploy** your application (trigger a new deployment)
 
-With this configuration, Vercel will automatically:
+### Why is this required?
+
+Because this is a monorepo with the Next.js app in the `frontend/` subdirectory, Vercel needs to know where to find:
+- `package.json` (for dependencies)
+- `next.config.js` (for Next.js configuration)
+- `pages/` directory (for routes)
+
+Without setting the Root Directory, Vercel will look in the repository root and won't find these files, causing the build to fail.
+
+### What happens after configuration?
+
+Once the Root Directory is set to `frontend`, Vercel will automatically:
 - Detect the Next.js framework
 - Install dependencies from `frontend/package.json`
 - Build using `frontend/next.config.js`
-- Serve the application correctly
-
-### Option 2: Use vercel.json Configuration (Alternative)
-
-If you prefer to configure deployment via repository files, the `vercel.json` in the repository root is configured to:
-
-- Install dependencies from the `frontend/` directory
-- Build the Next.js app located in `frontend/`
-- Output to `frontend/.next`
-
-The configuration should work without additional Vercel dashboard settings.
+- Serve the application correctly at your Vercel domain
 
 ## Environment Variables
 
