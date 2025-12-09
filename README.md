@@ -220,28 +220,28 @@ The `docker-compose.yml` includes a PostgreSQL 15 container. Connection details:
 
 ### Frontend (Vercel)
 
-**Automated Deployment:**
+> **📘 Important**: For detailed Vercel deployment instructions including monorepo configuration and troubleshooting, see [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md).
+
+**Quick Setup:**
 
 1. Connect your GitHub repository to Vercel
-2. Configure environment variables in Vercel dashboard
-3. Deployments will trigger automatically on push to `main`
+2. **Set Root Directory** to `frontend` in Project Settings → General → Root Directory
+3. Configure environment variables in Vercel dashboard (see below)
+4. Deployments will trigger automatically on push to `main`
 
-**Manual Deployment:**
-
-```bash
-cd frontend
-npm run build
-vercel --prod
-```
-
-**Environment Variables in Vercel:**
+**Required Environment Variables in Vercel:**
 
 Set these in your Vercel project settings:
-- `NEXT_PUBLIC_AUTH0_DOMAIN`
-- `NEXT_PUBLIC_AUTH0_CLIENT_ID`
-- `NEXT_PUBLIC_MEILISEARCH_HOST`
-- `NEXT_PUBLIC_API_URL`
-- `NEXT_PUBLIC_SENTRY_DSN`
+- `AUTH0_SECRET` - 32-byte hex string (generate with `openssl rand -hex 32`)
+- `AUTH0_BASE_URL` - Your Vercel deployment URL
+- `AUTH0_ISSUER_BASE_URL` - Your Auth0 domain URL
+- `AUTH0_CLIENT_ID` - Auth0 application client ID
+- `AUTH0_CLIENT_SECRET` - Auth0 application client secret
+- `NEXT_PUBLIC_AUTH0_DOMAIN` - Auth0 domain (for client-side)
+- `NEXT_PUBLIC_AUTH0_CLIENT_ID` - Auth0 client ID (for client-side)
+- `NEXT_PUBLIC_MEILISEARCH_HOST` - Meilisearch instance URL
+- `NEXT_PUBLIC_API_URL` - Backend API URL
+- `NEXT_PUBLIC_SENTRY_DSN` - Sentry DSN (optional)
 
 ### Backend
 

@@ -2,12 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  output: 'standalone',
-  
-  // Sentry configuration
-  sentry: {
-    hideSourceMaps: true,
-  },
 
   // Environment variables that should be available on the client
   env: {
